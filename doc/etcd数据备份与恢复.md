@@ -3,6 +3,7 @@
 针对 v3的api
 
 ## 备份
+
 ```
 ETCDCTL_API=3 etcdctl --endpoints=https://192.168.0.8:2379 \
   --cacert=/etc/kubernetes/pki/etcd/ca.pem --cert=/etc/kubernetes/pki/etcd/peer.pem \
@@ -20,6 +21,9 @@ ETCDCTL_API=3 ./etcdctl snapshot restore snapshot.db \
    --initial-advertise-peer-urls http://192.168.0.8:2380 \
   --data-dir /var/lib/etcd
 ```
+
+重启etcd服务
+
 
 ## 增加member
 其中 etcd2 数据名， peer-urls 是部署的etcd数据ip端口
