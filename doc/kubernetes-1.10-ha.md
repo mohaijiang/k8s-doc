@@ -11,6 +11,10 @@ node4: --
 node5: --
 node6： --
 
+
+高可用架构图
+![ha](https://d33wubrfki0l68.cloudfront.net/907122e279e519934b8af894a68d341d60a2c3f1/5ec55/images/docs/ha-master-gce.png)
+
 ## etcd 集群安装
 
 1. 下载cfssl 证书工具
