@@ -4,7 +4,9 @@
 
 ## 备份
 ```
-ETCDCTL_API=3 etcdctl --endpoints=https://192.168.0.4:2379,https://192.168.0.5:2379,https://192.168.0.6:2379 --cacert=/etc/kubernetes/ssl/ca.pem --cert=/etc/kubernetes/ssl/kubernetes.pem  --key=/etc/kubernetes/ssl/kubernetes-key.pem snapshot save snapshot.db
+ETCDCTL_API=3 etcdctl --endpoints=https://192.168.0.4:2379,https://192.168.0.5:2379,https://192.168.0.6:2379 \
+--cacert=/etc/kubernetes/ssl/ca.pem --cert=/etc/kubernetes/ssl/kubernetes.pem  --key=/etc/kubernetes/ssl/kubernetes-key.pem \
+snapshot save snapshot.db
 ```
 
 ## 恢复
@@ -17,3 +19,5 @@ ETCDCTL_API=3 ./etcdctl snapshot restore snapshot.db \
    --initial-advertise-peer-urls http://192.168.0.8:2380 \
   --data-dir /var/lib/etcd
 ```
+
+## 增加member
