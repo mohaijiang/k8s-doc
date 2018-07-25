@@ -264,6 +264,9 @@ helm install grafana-1.2.0.tgz --name grafana --namespace kube-system --set admi
 6: grafana 配置dashboard 监控面板
 
 - a: 进入grafana 登录页面，用户名为admin,密码为helm安装时设置`adminPassword`的密码,本案例为(admin)
+
+![login](prometheus_img/login.png)
+
 - b: 点击datasource 配置数据源配置页面
 
     name: 填写 prometheus
@@ -274,10 +277,13 @@ helm install grafana-1.2.0.tgz --name grafana --namespace kube-system --set admi
     
     点击 Save & Test
     
+![datasource](prometheus_img/datasource.png)
+    
 - c: 创建dashboard
 
     点击左侧菜单 CREATE -- Import
-    
+ ![import1](prometheus_img/import_dashboard.png)
+     
     在 paste JSON 填写
 ```
 {
@@ -2885,11 +2891,14 @@ helm install grafana-1.2.0.tgz --name grafana --namespace kube-system --set admi
 }
 ```
 
+![import2](prometheus_img/import_dashboard2.png)
  - 点击Load 进入确认页面
+![import3](prometheus_img/import_dashboard3.png)
 
  - 点击Import 进行保存
 
  - 在首页就可以看到kubernetes 集群监控状态
+ ![dashboard](prometheus_img/dashboard.png)
  
 此监控的指标有 
     
