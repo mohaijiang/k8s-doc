@@ -38,6 +38,11 @@ admin     NodePort   10.102.253.57   <none>        8080:30004/TCP   3h
 NAME                     READY     STATUS    RESTARTS   AGE       IP            NODE
 admin-6b8cc6d5cc-c7h42   1/1       Running   0          3h        10.244.6.21   tnode6
 
+
+
+================================
+
+
 Chain KUBE-MARK-MASQ (85 references)
  pkts bytes target     prot opt in     out     source               destination
     0     0 MARK       all  --  *      *       0.0.0.0/0            0.0.0.0/0            MARK or 0x4000
