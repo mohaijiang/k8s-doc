@@ -40,7 +40,7 @@ helm init --tiller-image registry.xonestep.com/google_containers/tiller:v2.9.1  
 ## nginx ingress
 
 ```$xslt
-helm install stable/nginx-ingress --name nginx-ingress --set rbac.create=true --namespace=kube-system
+helm install stable/nginx-ingress --name nginx-ingress --set rbac.create=true --namespace=kube-system --set defaultBackend.image.repository=registry.xonestep.com/google_containers/defaultbackend,rbac.create=true
 ```
 
 

@@ -254,7 +254,7 @@ kubectl apply -f grafana-pv.yaml -f grafana-pvc.yaml
 
 4: 使用helm 安装grafana
 ```
-helm install grafana-1.2.0.tgz --name grafana --namespace kube-system --set adminPassword=admin
+helmstall grafana in-1.2.0.tgz --name grafana --namespace kube-system --set adminPassword=admin
 ```
 
 5: grafana 访问配置
