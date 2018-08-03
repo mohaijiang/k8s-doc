@@ -47,23 +47,34 @@ helm install stable/nginx-ingress --name nginx-ingress --set rbac.create=true --
 ## heapster
 
 ```$xslt
-helm install --name heapster heapster-0.2.10.tgz  --namespace=kube-system --set image.repository=registry.xonestep.com/google_containers/heapster,rbac.create=true
+helm install --name heapster stable/heapster  --namespace=kube-system --set image.repository=registry.xonestep.com/google_containers/heapster,rbac.create=true
 ```
 
 ## dashboard
+
+```
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml
+
+kubectl create sa dashboard-admin -n kube-system
+kubectl create clusterrolebinding dashboard-admin --clusterrole=cluster-admin --serviceaccount=kube-system:dashboard-admin
+ADMIN_SECRET=$(kubectl get secrets -n kube-system | grep dashboard-admin | awk '{print $1}')
+DASHBOARD_LOGIN_TOKEN=$(kubectl describe secret -n kube-system ${ADMIN_SECRET} | grep -E '^token' | awk '{print $2}')
+echo ${DASHBOARD_LOGIN_TOKEN}
+```
 
 
 ## prometheus
 
 ```
-helm install --name prometheus prometheus-6.2.1.tgz --namespace kube-system --set kubeStateMetrics.image.repository=registry.xonestep.com/google_containers/kube-state-metrics
+helm install --name prometheus stable/prometheus --namespace kube-system --set kubeStateMetrics.image.repository=registry.xonestep.com/google_containers/kube-state-metrics
 ```
 
 ## grafana
 
 garfana 安装
 ```$xslt
-helm install grafana-1.2.0.tgz --name grafana --namespace kube-system
+helm install stable/grafana --name grafana --namespace kube-system
 ```
 
 garfana 配置
