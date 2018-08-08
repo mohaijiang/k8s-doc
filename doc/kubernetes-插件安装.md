@@ -47,7 +47,7 @@ helm install stable/nginx-ingress --name nginx-ingress --set rbac.create=true --
 ## heapster
 
 ```$xslt
-helm install --name heapster stable/heapster  --namespace=kube-system --set image.repository=registry.xonestep.com/google_containers/heapster,rbac.create=true
+helm install --name heapster stable/heapster  --namespace=kube-system --set image.repository=registry.xonestep.com/google_containers/heapster,rbac.create=true,resizer.resizer.resizer=registry.xonestep.com/google_containers/addon-resizer
 ```
 
 ## dashboard
