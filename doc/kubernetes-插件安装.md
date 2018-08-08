@@ -74,7 +74,7 @@ helm install --name prometheus stable/prometheus --namespace kube-system --set k
 
 garfana 安装
 ```$xslt
-helm install stable/grafana --name grafana --namespace kube-system
+helm install stable/grafana --name grafana --namespace kube-system  --set adminPassword=strongpassword
 ```
 
 garfana 配置
