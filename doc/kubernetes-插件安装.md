@@ -67,7 +67,7 @@ echo ${DASHBOARD_LOGIN_TOKEN}
 ## prometheus
 
 ```
-helm install --name prometheus stable/prometheus --namespace kube-system --set kubeStateMetrics.image.repository=registry.xonestep.com/google_containers/kube-state-metrics
+helm install --name prometheus stable/prometheus --namespace kube-system --set kubeStateMetrics.image.repository=registry.xonestep.com/google_containers/kube-state-metrics,alertmanager.persistentVolume.enabled=false,server.persistentVolume.enabled=false
 ```
 
 ## grafana
