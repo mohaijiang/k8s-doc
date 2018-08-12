@@ -9,22 +9,7 @@
 
 升级步骤概述：
 
-1. 备份当前etcd集群
-
-防止因错误操作导致集群升级失败或数据丢失
-
-2. 备份已有证书文件
-
-3. 停止所有kubernetes相关服务,master节点,node 节点,包括etcd,flannel,kubernetes api,controller-manager,schedule,kubelet,kube-proxy
-
-4. 重新生成所有相关服务的证书
-
-5. 覆盖原有证书
-
-6. 重启整个集群
-
-7. 重新通过node节点的csr
-
+重新生成相关证书文件，替换原有证书文件，然后重启集群
 
 ## STEP 1
 
@@ -78,6 +63,13 @@ systemctl stop <service>
 下载并修改 ca.sh,admin-config.sh,client-config.sh 上相关服务的ip参数
 
 修改完成后依次执行 ca.sh,admin-config.sh,client-config.sh
+
+```
+chmod +x *.sh
+./ca.sh
+./admin-config.sh
+./client-config.sh
+```
 重新生成证书
 
 ## STEP 5
