@@ -169,6 +169,8 @@ kubectl drain node <nodeName>
 ```
 
 * 证书升级
+    - kubeadm 安装方式证书升级
+    - 手工安装方式证书升级（k8s1.6[）
 
 ## 常用插件
 
