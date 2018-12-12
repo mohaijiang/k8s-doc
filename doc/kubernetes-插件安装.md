@@ -40,7 +40,7 @@ helm init --tiller-image registry.xonestep.com/google_containers/tiller:v2.9.1  
 ## nginx ingress
 
 ```$xslt
-helm install --name nginx-ingress --namespace kube-system stable/nginx-ingress --set controller.hostNetwork=true,controller.kind=DaemonSet
+helm install --name nginx-ingress --namespace kube-system stable/nginx-ingress --set controller.hostNetwork=true,controller.kind=DaemonSet,defaultBackend.image.repository=registry.onecloud.newtouch.com/google_containers/defaultbackend
 ```
 
 
