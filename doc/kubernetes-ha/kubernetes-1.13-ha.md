@@ -1,4 +1,4 @@
-# kubernetes 1.10 集群安装
+# kubernetes 1.13 集群安装
 
 以测试环境为例
 
