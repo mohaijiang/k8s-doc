@@ -90,7 +90,7 @@ apiServer:
 controlPlaneEndpoint: "15.15.15.5:6443"
 networking:
   podSubnet: 10.244.0.0/16
-imageRepository: gcr.mirrors.ustc.edu.cn/google_containers
+imageRepository: registry.cn-hangzhou.aliyuncs.com/google_containers
 EOF
 
 ## 初始化maseter1节点
