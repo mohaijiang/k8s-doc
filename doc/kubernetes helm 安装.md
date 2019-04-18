@@ -23,7 +23,7 @@ kubectl create -f rbac-config.yaml
 ```
 #### helm 初始化
 ```
-  helm init --service-account tiller --tiller-image registry.xonestep.com/google_containers/tiller:v2.9.1
+  helm init --service-account tiller --tiller-image registry.onetest.newtouch.com/google_containers/tiller:v2.9.1
 ```
 #### 注意事项
 版本需要一致  
