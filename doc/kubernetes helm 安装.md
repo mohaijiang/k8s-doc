@@ -19,7 +19,7 @@ kubectl create -f rbac-config.yaml
 ```
 镜像可能下不下来,请手动下载
 ```
-  docker pull registry.xonestep.com/google_containers/tiller:v2.9.1
+  docker pull registry.onetest.newtouch.com/google_containers/tiller:v2.9.1
 ```
 #### helm 初始化
 ```
