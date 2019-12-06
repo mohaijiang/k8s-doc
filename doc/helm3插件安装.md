@@ -25,4 +25,8 @@ helm install --namespace efk --set env.ELASTICSEARCH_HOSTS=http://elasticsearch-
 ```
 helm install --namespace kube-system --set controller.hostNetwork=true,controller.kind=DaemonSet,controller.dnsPolicy=ClusterFirstWithHostNet,defaultBackend.image.repository=gcr.azk8s.cn/google-containers/defaultbackend-amd64 nginx-ingress stable/nginx-ingress
 ```
-
+## cert-manager
+```
+helm repo add jetstack https://charts.jetstack.io
+helm install --namespace kube-system --version v0.12.0 --set ingressShim.defaultIssuerName=letsencrypt-prod,ingressShim.defaultIssuerKind=ClusterIssuer cert-manager jetstack/cert-manager
+```
