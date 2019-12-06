@@ -21,3 +21,8 @@ helm install --namespace efk --set master.persistence.storageClass=rook-ceph-blo
 helm install --namespace efk --set backend.type=es,backend.es.host=elasticsearch-client fluent-bit stable/fluent-bit
 helm install --namespace efk --set env.ELASTICSEARCH_HOSTS=http://elasticsearch-client:9200,service.nodePort=30010,service.type=NodePort,persistentVolumeClaim.enabled=true,persistentVolumeClaim.storageClass=rook-ceph-block,readinessProbe.enabled=true kibana stable/kibana
 ```
+## nginx-ingress
+```
+helm install --namespace kube-system --set controller.hostNetwork=true,controller.kind=DaemonSet,controller.dnsPolicy=ClusterFirstWithHostNet,defaultBackend.image.repository=gcr.azk8s.cn/google-containers/defaultbackend-amd64 nginx-ingress stable/nginx-ingress
+```
+
