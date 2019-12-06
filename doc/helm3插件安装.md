@@ -18,4 +18,6 @@ helm install --namespace prometheus --set service.type=NodePort,persistence.stor
 ## efk
 ```
 helm install --namespace efk --set master.persistence.storageClass=rook-ceph-block,data.persistence.storageClass=rook-ceph-block elasticsearch stable/elasticsearch
+helm install --namespace efk --set backend.type=es,backend.es.host=elasticsearch-client fluent-bit stable/fluent-bit
+helm install --namespace efk --set env.ELASTICSEARCH_HOSTS=http://elasticsearch-client:9200,service.nodePort=30010,service.type=NodePort,persistentVolumeClaim.enabled=true,persistentVolumeClaim.storageClass=rook-ceph-block,readinessProbe.enabled=true kibana stable/kibana
 ```
