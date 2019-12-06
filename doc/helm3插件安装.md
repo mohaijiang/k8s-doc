@@ -30,3 +30,9 @@ helm install --namespace kube-system --set controller.hostNetwork=true,controlle
 helm repo add jetstack https://charts.jetstack.io
 helm install --namespace kube-system --version v0.12.0 --set ingressShim.defaultIssuerName=letsencrypt-prod,ingressShim.defaultIssuerKind=ClusterIssuer cert-manager jetstack/cert-manager
 ```
+## harbor
+```
+helm repo add harbor https://helm.goharbor.io
+helm install --namespace harbor --set expose.ingress.hosts.core=harbor-192-168-50-116.nip.io,expose.ingress.hosts.notary=notary-harbor-192-168-50-116.nip.io,persistence.resourcePolicy=,persistence.persistentVolumeClaim.registry.storageClass=rook-ceph-block,persistence.persistentVolumeClaim.chartmuseum.storageClass=rook-ceph-block,persistence.persistentVolumeClaim.jobservice.storageClass=rook-ceph-block,persistence.persistentVolumeClaim.database.storageClass=rook-ceph-block,persistence.persistentVolumeClaim.redis.storageClass=rook-ceph-block,externalURL=https://harbor-192-168-50-116.nip.io --version 1.2.3 harbor harbor/harbor 
+
+```
