@@ -1,3 +1,8 @@
+## 增加stable仓库
+```
+helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+```
+
 ## dashboard
 ```
 helm install --namespace kube-system --set image.repository=gcr.azk8s.cn/google-containers/kubernetes-dashboard-amd64 kubernetes-dashboard   stable/kubernetes-dasboard
