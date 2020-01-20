@@ -63,3 +63,9 @@ spec:
   selector:
     role: nfs-server
  ```
+
+
+nfs provider
+```
+helm install --set nfs.server=x.x.x.x --set nfs.path=/exported/path stable/nfs-client-provisioner
+```
