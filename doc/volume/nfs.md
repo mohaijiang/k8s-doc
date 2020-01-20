@@ -65,7 +65,12 @@ spec:
  ```
 
 
-nfs provider
+安装nfs provider
 ```
 helm install --set nfs.server=x.x.x.x --set nfs.path=/exported/path stable/nfs-client-provisioner
+```
+
+设置默认storageclass
+```
+ kubectl patch storageclass nfs-client -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
