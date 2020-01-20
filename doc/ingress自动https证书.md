@@ -6,11 +6,12 @@
 ## 安装cert-manager
 
 ```
-⚡ helm install --name cert-manager \
+⚡ helm install  \
     --namespace kube-system \
     --set ingressShim.defaultIssuerName=letsencrypt-prod \
     --set ingressShim.defaultIssuerKind=ClusterIssuer \
-    stable/cert-manager
+    cert-manager \
+    jetstack/cert-manager --version v0.12.0 
 ```
 
 
