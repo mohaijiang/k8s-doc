@@ -1,3 +1,9 @@
+## 官方方案
+
+`https://github.com/kubernetes-retired/external-storage/tree/master/nfs`
+
+
+
 ## nfs服务搭建
 
 创建nfs-server
