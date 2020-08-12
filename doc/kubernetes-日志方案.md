@@ -1,3 +1,7 @@
+# Grafana Loki
+轻量日志收集方案
+
+
 # kubernetes EFK 安装配置
 
 1. 下载官方yaml文件，地址： https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch
