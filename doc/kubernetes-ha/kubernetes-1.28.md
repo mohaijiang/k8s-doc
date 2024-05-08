@@ -18,7 +18,7 @@ systemctl stop containerd
 rm -rf /etc/containerd/config.toml
 containerd config default |  tee /etc/containerd/config.toml
 sed -i 's#SystemdCgroup = false#SystemdCgroup = true#g' /etc/containerd/config.toml
-sed -i 's#sandbox_image = "k8s.gcr.io/pause:3.6"#sandbox_image = "registry.aliyuncs.com/google_containers/pause:3.7"#g' /etc/containerd/config.toml
+sed -i 's#sandbox_image = "k8s.gcr.io/pause:3.6"#sandbox_image = "registry.aliyuncs.com/google_containers/pause:3.6"#g' /etc/containerd/config.toml
 systemctl restart containerd
 ```
 
