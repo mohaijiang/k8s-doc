@@ -149,5 +149,5 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system --create-nam
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack  --create-namespace --namespace kube-prometheus
+helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack  --create-namespace --namespace kube-prometheus --set prometheusOperator.admissionWebhooks.patch.image.registry=k8s.dockerproxy.com
 ```
