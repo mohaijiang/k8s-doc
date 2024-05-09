@@ -27,6 +27,14 @@ systemctl restart containerd
 ## 安装 kubeadm kubectl kubelet
 
 ```shell
+
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.ipv4.ip_forward = 1
+EOF
+
+# Apply sysctl params without reboot
+sudo sysctl --system
+
 apt-get update && sudo apt-get install -y apt-transport-https
 curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add - 
 cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
@@ -40,6 +48,10 @@ sudo apt-get install -y kubelet kubeadm kubectl
 ## 初始化集群
 ```
 kubeadm init --pod-network-cidr=10.244.0.0/16 --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
+
+## 使用docker 驱动
+## kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=10.244.0.0/16 --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers 
+
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 ### 安装flannel 网络插件
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
