@@ -166,15 +166,11 @@ helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-sta
 ## grafana 用户名: admin, 密码prom-operator
 ```
 
-## efk 
+## efk  (只支持docker 运行时，containerd 运行时不支持）
 ```
 helm repo add elastic https://helm.elastic.co
 helm repo update
 helm upgrade --install elasticsearch --version 7.17.3 elastic/elasticsearch --namespace elastic-system  --create-namespace  --set rbac.create=true,replicas=2,minimumMasterNodes=1
-
-## kibana 登录名为：elastic
-## 获取kibana 登录密码：
-kubectl -n elastic-system get secret elasticsearch-es-elastic-user -o=jsonpath='{.data.elastic}' | base64 --decode; echo
 
 ## 部署Fluentd 日志采集器
 cat <<EOF > fluentd-ds-rbac.yaml
@@ -245,11 +241,11 @@ spec:
         image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
-            value: "elasticsearch-es-http"
+            value: "elasticsearch-master"
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
-            value: "https"
+            value: "http"
           # Option to configure elasticsearch plugin with self signed certs
           # ================================================================
           - name: FLUENT_ELASTICSEARCH_SSL_VERIFY
@@ -263,7 +259,7 @@ spec:
           - name: FLUENT_ELASTICSEARCH_USER
             value: "elastic"
           - name: FLUENT_ELASTICSEARCH_PASSWORD
-            value: "81s8JzW5w78EteO4D2yZe33k"
+            value: ""
           # If you don't setup systemd in the container, disable it 
           # =====================
           - name: FLUENTD_SYSTEMD_CONF
@@ -294,4 +290,10 @@ spec:
 EOF
 
 kubectl apply -f fluentd-ds-rbac.yaml
+
+
+helm upgrade --install kibana --version 7.17.3 elastic/kibana  --namespace elastic-system  --create-namespace --set service.type=NodePort,service.nodePort=31000
+
+
+## 参考： https://kamrul.dev/deploy-efk-stack-with-helm-3-in-kubernetes/
 ```
