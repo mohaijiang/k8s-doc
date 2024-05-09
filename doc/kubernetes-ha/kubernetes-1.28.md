@@ -149,5 +149,14 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system --create-nam
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack  --create-namespace --namespace kube-prometheus --set prometheusOperator.admissionWebhooks.patch.image.registry=k8s.dockerproxy.com
+helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack  --create-namespace --namespace kube-prometheus --set prometheusOperator.admissionWebhooks.patch.image.registry=k8s.dockerproxy.com,kube-state-metrics.image.registry=k8s.dockerproxy.com,grafana.persistence.enabled=true,grafana.service.type=NodePort
+
+## grafana 用户名: admin, 密码prom-operator
+```
+
+## efk stack
+```
+helm repo add elastic https://helm.elastic.co
+helm repo update
+helm upgrade --install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
 ```
