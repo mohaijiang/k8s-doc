@@ -303,3 +303,13 @@ helm upgrade --install kibana --version 7.17.3 elastic/kibana  --namespace elast
 
 ## 参考： https://kamrul.dev/deploy-efk-stack-with-helm-3-in-kubernetes/
 ```
+
+
+## 安装cri-docker 
+release:  https://github.com/Mirantis/cri-dockerd/releases
+
+## 安装gpu支持
+```bash
+## ubuntu 
+sudo ubuntu-drivers autoinstall
+```
