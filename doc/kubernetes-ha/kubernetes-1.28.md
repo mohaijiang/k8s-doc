@@ -331,4 +331,22 @@ sudo apt-get install -y nvidia-container-toolkit
 sudo nvidia-ctk runtime configure --runtime=docker
 
 sudo systemctl restart docker
+
+
+cat /etc/docker/daemon.json
+{
+   "exec-opts": ["native.cgroupdriver=systemd"],
+   "default-runtime": "nvidia",
+   "runtimes": {
+        "nvidia": {
+            "args": [],
+            "path": "nvidia-container-runtime"
+        }
+    },
+    "registry-mirrors": [
+        "https://docker.m.daocloud.io",
+        "https://docker.1panel.live"
+    ]
+}
+
 ```
