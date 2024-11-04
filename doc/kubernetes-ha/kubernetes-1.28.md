@@ -350,3 +350,8 @@ cat /etc/docker/daemon.json
 }
 
 ```
+
+## 安装nvidia 资源识别
+```
+kubectl -n kube-system apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
+```
