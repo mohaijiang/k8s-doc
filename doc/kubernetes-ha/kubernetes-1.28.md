@@ -1,4 +1,4 @@
-# kubernetes 1.24 安装
+# kubernetes 1.28 安装
 
 ## containerd install
 
