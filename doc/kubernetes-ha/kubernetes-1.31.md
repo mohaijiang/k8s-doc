@@ -1,4 +1,4 @@
-# kubernetes 1.28 安装
+# kubernetes 1.31 安装
 
 ## containerd install
 
@@ -16,12 +16,12 @@ export CONTAINER_RUNTIME_ENDPOINT=unix:///run/containerd/containerd.sock
 ## 配置cri 
 
 ```
-systemctl stop containerd
-rm -rf /etc/containerd/config.toml
-containerd config default |  tee /etc/containerd/config.toml
+sudo systemctl stop containerd
+sudo rm -rf /etc/containerd/config.toml
+containerd config default | sudo tee /etc/containerd/config.toml
 sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_containers/g' /etc/containerd/config.toml
-systemctl restart containerd
+sudo systemctl restart containerd
 ```
 
 ## 安装 kubeadm kubectl kubelet
@@ -39,13 +39,19 @@ EOF
 # Apply sysctl params without reboot
 sudo sysctl --system
 
-apt-get update && sudo apt-get install -y apt-transport-https
-curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | sudo apt-key add - 
-cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
-deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
-EOF
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+sudo mkdir -p -m 755 /etc/apt/keyrings
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+sudo systemctl enable --now kubelet
 ```
 
 
