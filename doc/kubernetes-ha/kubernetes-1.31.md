@@ -26,6 +26,7 @@ sudo systemctl restart containerd
 
 ## 安装 kubeadm kubectl kubelet
 
+```
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
@@ -70,8 +71,6 @@ kubeadm init --pod-network-cidr=10.244.0.0/16 --image-repository=registry.cn-han
 ## kubeadm init --cri-socket=unix:///var/run/cri-dockerd.sock --pod-network-cidr=10.244.0.0/16 --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers 
 
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-### 安装flannel 网络插件
-kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 ```
 
 
@@ -79,6 +78,15 @@ kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Doc
 ```
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 bash get_helm.sh
+```
+
+## 安装flannel 网络插件
+```
+kubectl create ns kube-flannel
+kubectl label --overwrite ns kube-flannel pod-security.kubernetes.io/enforce=privileged
+
+helm repo add flannel https://flannel-io.github.io/flannel/
+helm install flannel --set podCidr="10.244.0.0/16" --namespace kube-flannel flannel/flannel
 ```
 
 ## ingress-nginx
