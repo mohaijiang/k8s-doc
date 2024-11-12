@@ -7,7 +7,7 @@
 ```
 
 curl -fsSL -o get_docker.sh get.docker.com
-bash get_docker.sh --mirror aliyun
+bash get_docker.sh --mirror Aliyun
 
 export CONTAINER_RUNTIME_ENDPOINT=unix:///run/containerd/containerd.sock
 
