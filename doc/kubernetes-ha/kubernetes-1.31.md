@@ -19,8 +19,8 @@ export CONTAINER_RUNTIME_ENDPOINT=unix:///run/containerd/containerd.sock
 sudo systemctl stop containerd
 sudo rm -rf /etc/containerd/config.toml
 containerd config default | sudo tee /etc/containerd/config.toml
-sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
-sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_containers/g' /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_containers/g' /etc/containerd/config.toml
 sudo systemctl restart containerd
 ```
 
