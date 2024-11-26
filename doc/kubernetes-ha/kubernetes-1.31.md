@@ -186,7 +186,7 @@ kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={".data.token"
 ```
 helm repo add longhorn https://charts.longhorn.io
 helm repo update
-helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version 1.6.1
+helm upgrade longhorn --install  longhorn/longhorn --namespace longhorn-system --create-namespace --set ingress.enabled=true,ingress.host=longhorn.192.168.xx.xx.nip.io,ingress.ingressClassName=nginx
 ```
 
 
