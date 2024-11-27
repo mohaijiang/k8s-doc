@@ -199,136 +199,18 @@ helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-sta
 ## grafana 用户名: admin, 密码prom-operator
 ```
 
-## efk  (只支持docker 运行时，containerd 运行时不支持）
+## ECK 日志收集
 ```
-helm repo add elastic https://helm.elastic.co
-helm repo update
-helm upgrade --install elasticsearch --version 7.17.3 elastic/elasticsearch --namespace elastic-system  --create-namespace  --set rbac.create=true,replicas=2,minimumMasterNodes=1
+# 1. Install custom resource definitions:
+kubectl create -f https://download.elastic.co/downloads/eck/2.15.0/crds.yaml
 
-## 部署Fluentd 日志采集器
-cat <<EOF > fluentd-ds-rbac.yaml
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: fluentd
-  namespace: elastic-system
+# 2. Install the ECK operator with its RBAC rules:
+kubectl apply -f https://download.elastic.co/downloads/eck/2.15.0/operator.yaml
 
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: fluentd
-  namespace: elastic-system
-rules:
-- apiGroups:
-  - ""
-  resources:
-  - pods
-  - namespaces
-  verbs:
-  - get
-  - list
-  - watch
+## 安装 ElasticSearch, Kibana, filebeat
+kubectl apply -f https://raw.githubusercontent.com/elastic/cloud-on-k8s/2.15/config/recipes/beats/filebeat_autodiscover.yaml
 
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: fluentd
-roleRef:
-  kind: ClusterRole
-  name: fluentd
-  apiGroup: rbac.authorization.k8s.io
-subjects:
-- kind: ServiceAccount
-  name: fluentd
-  namespace: elastic-system
----
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: fluentd
-  namespace: elastic-system
-  labels:
-    k8s-app: fluentd-logging
-    version: v1
-spec:
-  selector:
-    matchLabels:
-      k8s-app: fluentd-logging
-      version: v1
-  template:
-    metadata:
-      labels:
-        k8s-app: fluentd-logging
-        version: v1
-    spec:
-      serviceAccount: fluentd
-      serviceAccountName: fluentd
-      # tolerations:
-      # - key: node-role.kubernetes.io/master
-      #  effect: NoSchedule
-      containers:
-      - name: fluentd
-        image: fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch
-        env:
-          - name:  FLUENT_ELASTICSEARCH_HOST
-            value: "elasticsearch-master"
-          - name:  FLUENT_ELASTICSEARCH_PORT
-            value: "9200"
-          - name: FLUENT_ELASTICSEARCH_SCHEME
-            value: "http"
-          # Option to configure elasticsearch plugin with self signed certs
-          # ================================================================
-          - name: FLUENT_ELASTICSEARCH_SSL_VERIFY
-            value: "false"
-          # Option to configure elasticsearch plugin with tls
-          # ================================================================
-          - name: FLUENT_ELASTICSEARCH_SSL_VERSION
-            value: "TLSv1_2"
-          # X-Pack Authentication
-          # =====================
-          - name: FLUENT_ELASTICSEARCH_USER
-            value: "elastic"
-          - name: FLUENT_ELASTICSEARCH_PASSWORD
-            value: ""
-          # If you don't setup systemd in the container, disable it 
-          # =====================
-          - name: FLUENTD_SYSTEMD_CONF
-            value: "disable"          
-        resources:
-          limits:
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
-        # When actual pod logs in /var/lib/docker/containers, the following lines should be used.
-        - name: dockercontainerlogdirectory
-          mountPath: /var/lib/docker/containers
-          readOnly: true
-      terminationGracePeriodSeconds: 30
-      volumes:
-      - name: varlog
-        hostPath:
-          path: /var/log
-      # When actual pod logs in /var/lib/docker/containers, the following lines should be used.
-      - name: dockercontainerlogdirectory
-        hostPath:
-          path: /var/lib/docker/containers
-
-EOF
-
-kubectl apply -f fluentd-ds-rbac.yaml
-
-
-helm upgrade --install kibana --version 7.17.3 elastic/kibana  --namespace elastic-system  --create-namespace --set service.type=NodePort,service.nodePort=31000
-
-
-## 参考： https://kamrul.dev/deploy-efk-stack-with-helm-3-in-kubernetes/
+## 参考： [k8s_filebeat_with_autodiscover](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-configuration-examples.html#k8s_filebeat_with_autodiscover)
 ```
 
 
