@@ -210,8 +210,9 @@ kubectl apply -f https://download.elastic.co/downloads/eck/2.15.0/operator.yaml
 ## 安装 ElasticSearch, Kibana, filebeat
 kubectl apply -f https://raw.githubusercontent.com/elastic/cloud-on-k8s/2.15/config/recipes/beats/filebeat_autodiscover.yaml
 
-## 参考： [k8s_filebeat_with_autodiscover](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-configuration-examples.html#k8s_filebeat_with_autodiscover)
+
 ```
+参考： [k8s_filebeat_with_autodiscover](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-configuration-examples.html#k8s_filebeat_with_autodiscover)
 
 
 ## 安装cri-docker 
