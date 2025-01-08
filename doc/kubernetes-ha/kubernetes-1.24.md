@@ -84,3 +84,6 @@ kubeadm init --config kubeadm-init.yml
 echo "185.199.108.133 raw.githubusercontent.com" >> /etc/hosts
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml 
 ```
+
+## master 允许工作节点
+kubectl taint nodes mohaijiang node-role.kubernetes.io/master-
