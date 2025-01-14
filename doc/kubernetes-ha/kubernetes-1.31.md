@@ -25,7 +25,7 @@ sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_co
 # 配置mirror源
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
         [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
-           endpoint = ["https://docker.m.daocloud.io","https://docker.1panel.live"]
+           endpoint = ["https://docker.1panel.live"]
 
 sudo systemctl restart containerd
 ```
