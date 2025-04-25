@@ -108,12 +108,13 @@ helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ing
 ```
 helm repo add jetstack https://charts.jetstack.io --force-update
 helm repo update
-helm install \
+helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --version v1.14.5 \
+  --version v1.8.1 \
   --set installCRDs=true
+
 
 cat <<EOF > value.yaml
 apiVersion: cert-manager.io/v1
