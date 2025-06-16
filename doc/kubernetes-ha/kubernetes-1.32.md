@@ -264,5 +264,14 @@ cat /etc/docker/daemon.json
 
 ## 安装nvidia 资源识别
 ```
-kubectl -n kube-system apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
+# kubectl -n kube-system apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
+
+helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
+helm repo update
+helm upgrade -i nvdp nvdp/nvidia-device-plugin \
+  --namespace nvidia-device-plugin \
+  --create-namespace \
+  --version 0.17.1
+
+kubectl label node <gpu-node-name> nvidia.com/gpu.present=true
 ```
