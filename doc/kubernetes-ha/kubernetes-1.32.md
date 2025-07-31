@@ -33,6 +33,8 @@ sudo systemctl restart containerd
 ## 安装 kubeadm kubectl kubelet
 
 ```
+swapoff -a
+
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
 overlay
 br_netfilter
