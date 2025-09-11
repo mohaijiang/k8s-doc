@@ -15,6 +15,7 @@ export CONTAINER_RUNTIME_ENDPOINT=unix:///run/containerd/containerd.sock
 
 ## 配置cri 
 
+### containerd
 ```
 sudo systemctl stop containerd
 sudo rm -rf /etc/containerd/config.toml
@@ -28,6 +29,14 @@ sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_co
            endpoint = ["https://docker.xuanyuan.me","https://docker.1panel.live"]
 
 sudo systemctl restart containerd
+```
+
+### docker
+```
+# ubuntu版本，其他os 参考 https://github.com/Mirantis/cri-dockerd/releases
+wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-dockerd_0.3.20.3-0.ubuntu-$(. /etc/os-release && echo $VERSION_CODENAME)_amd64.deb
+
+sudo apt install -y ./cri-dockerd_0.3.20.3-0.ubuntu-$(. /etc/os-release && echo $VERSION_CODENAME)_amd64.deb
 ```
 
 ## 安装 kubeadm kubectl kubelet
