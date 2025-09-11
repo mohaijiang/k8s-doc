@@ -1,10 +1,8 @@
 #!/bin/bash
 set -e
 
-## 备注 ，执行此脚本前，需要提前准备 /root/kubeadm.yaml,  最好通过kubectl -n kube-system get cm kubeadm-config -o yaml > /root/kubeadm_cm.yaml 方式导出
-
-OLD_IP="192.168.122.122"
-NEW_IP="192.168.122.123"
+OLD_IP="192.168.122.123"
+NEW_IP="192.168.122.124"
 KUBEADM_CONFIG="/root/kubeadm.yaml"
 
 echo "正在将 Kubernetes IP 从 $OLD_IP 更换为 $NEW_IP"
@@ -16,15 +14,7 @@ if [ ! -f "$KUBEADM_CONFIG" ]; then
 fi
 
 # 2. 替换 kubeadm.yaml 中的 IP，如果没有新的 IP，追加上
-if ! grep -q "$NEW_IP" "$KUBEADM_CONFIG"; then
-    echo "在 $KUBEADM_CONFIG 中未发现新 IP，追加上"
-    # 假设 kubeadm.yaml 中有 apiServer 节点定义，需要替换或追加 advertiseAddress
-    if grep -q "advertiseAddress:" "$KUBEADM_CONFIG"; then
-        sed -i "s/$OLD_IP/$NEW_IP/g" "$KUBEADM_CONFIG"
-    else
-        echo "apiServer:\n  advertiseAddress: $NEW_IP" >> "$KUBEADM_CONFIG"
-    fi
-fi
+sed -i "/- $OLD_IP/c\  - $NEW_IP" "$KUBEADM_CONFIG"
 
 # 3. 替换 manifests 目录下的静态 Pod 配置文件
 for file in /etc/kubernetes/manifests/*.yaml; do
@@ -65,16 +55,7 @@ cp /etc/kubernetes/admin.conf ~/.kube/config
 echo "等待静态 Pod 重建..."
 sleep 20
 
-# 9. 清理 controller-manager、scheduler、kube-proxy 容器，防止加载旧配置
-echo "清理旧的静态 Pod 容器"
-for pod in kube-controller-manager kube-scheduler kube-proxy; do
-    container_id=$(docker ps -a --filter "name=$pod" -q)
-    if [ -n "$container_id" ]; then
-        echo "移除容器 $pod ($container_id)"
-        docker rm -f $container_id
-    fi
-done
-
+# 9. 修改proxy config
 echo "更新 kube-proxy ConfigMap 中的 kubeconfig"
 KUBE_PROXY_CM="kube-proxy"
 KUBE_PROXY_NS="kube-system"
@@ -88,6 +69,17 @@ sed -i "s/$OLD_IP/$NEW_IP/g" /tmp/kube-proxy-cm.yaml
 kubectl -n $KUBE_PROXY_NS apply -f /tmp/kube-proxy-cm.yaml
 
 echo "kube-proxy ConfigMap 已更新"
+
+# 10. 清理 controller-manager、scheduler、kube-proxy 容器，防止加载旧配置
+echo "清理旧的静态 Pod 容器"
+for pod in kube-controller-manager kube-scheduler kube-proxy; do
+    container_id=$(docker ps -a --filter "name=$pod" -q)
+    if [ -n "$container_id" ]; then
+        echo "移除容器 $pod ($container_id)"
+        docker rm -f $container_id
+    fi
+done
+
 
 echo "完成！请使用新的 admin.conf 验证连接："
 echo "  KUBECONFIG=/etc/kubernetes/admin.conf kubectl get nodes"
