@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+## 备注 ，执行此脚本前，需要提前准备 /root/kubeadm.yaml,  最好通过kubectl -n kube-system get cm kubeadm-config -o yaml > /root/kubeadm_cm.yaml 方式导出
+
 OLD_IP="192.168.122.122"
 NEW_IP="192.168.122.123"
 KUBEADM_CONFIG="/root/kubeadm.yaml"
