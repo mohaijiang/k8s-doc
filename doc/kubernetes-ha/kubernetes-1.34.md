@@ -39,7 +39,7 @@ wget https://github.com/Mirantis/cri-dockerd/releases/download/v0.3.20/cri-docke
 sudo apt install -y ./cri-dockerd_0.3.20.3-0.ubuntu-$(. /etc/os-release && echo $VERSION_CODENAME)_amd64.deb
 
 sudo mkdir -p /etc/systemd/system/cri-docker.service.d && \
-echo -e "[Service]\nExecStart=\nExecStart=/usr/bin/cri-dockerd --container-runtime-endpoint fd:// --pod-infra-container-image=registry.aliyuncs.com/google_containers/pause:3.10" | sudo tee /etc/systemd/system/cri-docker.service.d/override.conf
+echo -e "[Service]\nExecStart=\nExecStart=/usr/bin/cri-dockerd --container-runtime-endpoint fd:// --pod-infra-container-image=registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.10.1" | sudo tee /etc/systemd/system/cri-docker.service.d/override.conf
 sudo systemctl daemon-reload
 sudo systemctl restart cri-docker
 
