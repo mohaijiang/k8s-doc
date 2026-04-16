@@ -27,6 +27,7 @@ sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_co
     [plugins.'io.containerd.cri.v1.images'.registry]
       config_path = '/etc/containerd/certs.d'
 
+```
 mkdir -p /etc/containerd/certs.d/docker.io
 cat << EOF > /etc/containerd/certs.d/docker.io/hosts.toml
 server = "https://registry-1.docker.io"
@@ -37,7 +38,6 @@ server = "https://registry-1.docker.io"
 EOF
 
 sudo systemctl restart containerd
-```
 
 ```
 
@@ -53,6 +53,7 @@ EOF
 
 sudo modprobe overlay
 sudo modprobe br_netfilter
+```
 
 ## 设置所需的 sysctl 参数，参数在重新启动后保持不变
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
@@ -110,9 +111,9 @@ EOF
 helm install calico projectcalico/tigera-operator --version v3.31.4 -f values.yaml --namespace tigera-operator
 ```
 
-## ingress-nginx
+## Envoy Gateway
 ```
-TODO...
+helm install eg oci://docker.1ms.run/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace   --skip-crds
 ```
 
 ## cert-manager
