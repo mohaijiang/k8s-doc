@@ -113,7 +113,69 @@ helm install calico projectcalico/tigera-operator --version v3.31.4 -f values.ya
 
 ## Envoy Gateway
 ```
-helm install eg oci://docker.1ms.run/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace   --skip-crds
+helm install eg oci://dockerproxy.net/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace   --skip-crds
+
+cat > gateway.yaml <<EOF
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: eg
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: eg
+spec:
+  gatewayClassName: eg
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+EOF
+
+kubectl apply -f gateway.yaml
+
+cat > docker-compose.yaml <<EOF
+version: "3.8"
+
+services:
+  gateway-proxy:
+    image: nginx:alpine
+    container_name: gateway-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - proxy-net
+
+networks:
+  proxy-net:
+    driver: bridge
+EOF
+
+NODEPORT=$(kubectl -n envoy-gateway-system get svc \
+  -l gateway.envoyproxy.io/owning-gateway-name=eg,gateway.envoyproxy.io/owning-gateway-namespace=default \
+  -o jsonpath='{.items[0].spec.ports[0].nodePort}')
+
+echo $NODEPORT
+
+cat > nginx.conf <<EOF
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://172.17.0.1:$NODEPORT;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+EOF
 ```
 
 ## cert-manager
