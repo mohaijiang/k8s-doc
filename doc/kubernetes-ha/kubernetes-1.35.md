@@ -27,14 +27,16 @@ sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_co
 
 vim  /etc/containerd/config.toml
 
-# 找到 registry, 配置 config_path 为 /etc/containerd/certs.d
+找到 registry, 配置 config_path 为 /etc/containerd/certs.d
+
 ```
     [plugins.'io.containerd.cri.v1.images'.registry]
       config_path = '/etc/containerd/certs.d'
 ```
 
-# 配置mirror源
+
 ```
+# 配置mirror源
 mkdir -p /etc/containerd/certs.d/docker.io
 
 cat << EOF > /etc/containerd/certs.d/docker.io/hosts.toml
