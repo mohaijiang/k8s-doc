@@ -135,6 +135,21 @@ EOF
 
 kubectl apply -f gateway.yaml
 
+cat > nginx.conf <<EOF
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://172.17.0.1:32590;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+EOF
+
 cat > docker-compose.yaml <<EOF
 version: "3.8"
 
@@ -257,93 +272,17 @@ kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={".data.token"
 
 ## longhorn
 ```
+apt-get install open-iscsi nfs-common cryptsetup dmsetup
 helm repo add longhorn https://charts.longhorn.io
-helm repo update
-helm upgrade longhorn --install  longhorn/longhorn --namespace longhorn-system --create-namespace --set ingress.enabled=true,ingress.host=longhorn.192.168.xx.xx.nip.io,ingress.ingressClassName=nginx
+helm repo update  
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version 1.11.1
 ```
 
 
-## prometheus
+## kata-container
 ```
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm upgrade --install prometheus-stack prometheus-community/kube-prometheus-stack  --create-namespace --namespace kube-prometheus --set prometheusOperator.admissionWebhooks.patch.image.registry=k8s.dockerproxy.com,kube-state-metrics.image.registry=k8s.dockerproxy.com,grafana.persistence.enabled=true,grafana.service.type=NodePort
+export VERSION=$(curl -sSL https://api.github.com/repos/kata-containers/kata-containers/releases/latest | jq .tag_name | tr -d '"')
+export CHART="oci://ghcr.io/kata-containers/kata-deploy-charts/kata-deploy"
+helm install kata-deploy "${CHART}" --version "${VERSION}"
 
-## grafana 用户名: admin, 密码prom-operator
-```
-
-## ECK 日志收集
-```
-# 1. Install custom resource definitions:
-kubectl create -f https://download.elastic.co/downloads/eck/2.15.0/crds.yaml
-
-# 2. Install the ECK operator with its RBAC rules:
-kubectl apply -f https://download.elastic.co/downloads/eck/2.15.0/operator.yaml
-
-## 安装 ElasticSearch, Kibana, filebeat
-kubectl apply -f https://raw.githubusercontent.com/elastic/cloud-on-k8s/2.15/config/recipes/beats/filebeat_autodiscover.yaml
-
-
-```
-参考： [k8s_filebeat_with_autodiscover](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-beat-configuration-examples.html#k8s_filebeat_with_autodiscover)
-
-
-## 安装cri-docker 
-release:  https://github.com/Mirantis/cri-dockerd/releases
-
-## 安装gpu支持
-安装 驱动
-```bash
-## ubuntu 
-sudo ubuntu-drivers autoinstall
-```
-安装 nvidia container toolkit
-
-```
-## 参考 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt
-
-curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
-    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-sudo apt-get update
-
-sudo apt-get install -y nvidia-container-toolkit
-
-sudo nvidia-ctk runtime configure --runtime=docker
-
-sudo systemctl restart docker
-
-
-cat /etc/docker/daemon.json
-{
-   "exec-opts": ["native.cgroupdriver=systemd"],
-   "default-runtime": "nvidia",
-   "runtimes": {
-        "nvidia": {
-            "args": [],
-            "path": "nvidia-container-runtime"
-        }
-    },
-    "registry-mirrors": [
-        "https://docker.m.daocloud.io",
-        "https://docker.1panel.live"
-    ]
-}
-
-```
-
-## 安装nvidia 资源识别
-```
-# kubectl -n kube-system apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.12.3/nvidia-device-plugin.yml
-
-helm repo add nvdp https://nvidia.github.io/k8s-device-plugin
-helm repo update
-helm upgrade -i nvdp nvdp/nvidia-device-plugin \
-  --namespace nvidia-device-plugin \
-  --create-namespace \
-  --version 0.17.1
-
-kubectl label node <gpu-node-name> nvidia.com/gpu.present=true
 ```
