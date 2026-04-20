@@ -174,6 +174,8 @@ server {
     }
 }
 EOF
+
+docker compose up -d
 ```
 
 ## cert-manager
