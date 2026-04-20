@@ -270,6 +270,6 @@ helm install longhorn longhorn/longhorn --namespace longhorn-system --create-nam
 ```
 export VERSION=$(curl -sSL https://api.github.com/repos/kata-containers/kata-containers/releases/latest | jq .tag_name | tr -d '"')
 export CHART="oci://ghcr.io/kata-containers/kata-deploy-charts/kata-deploy"
-helm install kata-deploy "${CHART}" --version "${VERSION}"
+helm install kata-deploy "${CHART}" --version "${VERSION}" -n kube-system
 
 ```
