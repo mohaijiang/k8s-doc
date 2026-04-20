@@ -23,8 +23,10 @@ containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_containers/g' /etc/containerd/config.toml
 ```
-# 修改 mirror 文件
+修改 mirror 文件
+
 vim  /etc/containerd/config.toml
+
 # 找到 registry, 配置 config_path 为 /etc/containerd/certs.d
 ```
     [plugins.'io.containerd.cri.v1.images'.registry]
