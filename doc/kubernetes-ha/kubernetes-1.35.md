@@ -53,7 +53,7 @@ EOF
 
 sudo modprobe overlay
 sudo modprobe br_netfilter
-```
+
 
 ## 设置所需的 sysctl 参数，参数在重新启动后保持不变
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
@@ -63,8 +63,6 @@ EOF
 ## 应用 sysctl 参数而不重新启动
 sudo sysctl --system
 
-
-## 安装kubectl kubelet kubeadm
 sudo apt-get update
 sudo apt-get install -y apt-transport-https ca-certificates curl gpg
 sudo mkdir -p -m 755 /etc/apt/keyrings
@@ -108,7 +106,7 @@ installation:
     - cidr: 10.244.0.0/16
       encapsulation: VXLAN
 EOF
-helm install calico projectcalico/tigera-operator --version v3.31.4 -f values.yaml --namespace tigera-operator
+helm install calico projectcalico/tigera-operator --version v3.31.4 -f values.yaml --namespace tigera-operator --create-namespace 
 ```
 
 ## Envoy Gateway
