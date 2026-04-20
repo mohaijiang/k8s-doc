@@ -27,8 +27,8 @@ sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_co
     [plugins.'io.containerd.cri.v1.images'.registry]
       config_path = '/etc/containerd/certs.d'
 
-```
 mkdir -p /etc/containerd/certs.d/docker.io
+
 cat << EOF > /etc/containerd/certs.d/docker.io/hosts.toml
 server = "https://registry-1.docker.io"
 
