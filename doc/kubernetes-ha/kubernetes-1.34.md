@@ -116,9 +116,7 @@ helm install flannel --set podCidr="10.244.0.0/16" --namespace kube-flannel flan
 ```
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace
-## k8s.dockerproxy.com 已不可用
-## helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.image.registry=k8s.dockerproxy.com,controller.admissionWebhooks.patch.image.registry=k8s.dockerproxy.com
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.hostPort.enabled=true
 ```
 
 ## cert-manager
@@ -143,7 +141,7 @@ spec:
    # The ACME server URL
    server: https://acme-v02.api.letsencrypt.org/directory
    # Email address used for ACME registration
-   email: haijiang.mo@tntlinking.com
+   email: danyan.lin@newtouch.com
    # Name of a secret used to store the ACME account private key
    privateKeySecretRef:
      name: letsencrypt-prod

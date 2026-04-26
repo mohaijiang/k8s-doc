@@ -47,6 +47,36 @@ server = "https://registry-1.docker.io"
   skip_verify = false
 EOF
 
+mkdir -p /etc/containerd/certs.d/gcr.io
+
+cat << EOF > /etc/containerd/certs.d/gcr.io/hosts.toml
+server = "https://gcr.io"
+
+[host."https://gcr.nju.edu.cn"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+EOF
+
+mkdir -p /etc/containerd/certs.d/registry.k8s.io
+
+cat << EOF > /etc/containerd/certs.d/registry.k8s.io/hosts.toml
+server = "https://registry.k8s.io"
+
+[host."https://k8s.nju.edu.cn"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+EOF
+
+mkdir -p /etc/containerd/certs.d/quay.io
+
+cat << EOF > /etc/containerd/certs.d/quay.io/hosts.toml
+server = "https://quay.io"
+
+[host."https://k8s.nju.edu.cn"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+EOF
+
 sudo systemctl restart containerd
 
 ```
