@@ -42,7 +42,7 @@ mkdir -p /etc/containerd/certs.d/docker.io
 cat << EOF > /etc/containerd/certs.d/docker.io/hosts.toml
 server = "https://registry-1.docker.io"
 
-[host."https://dockerproxy.net"]
+[host."https://docker.sparkcr.cn"]
   capabilities = ["pull", "resolve"]
   skip_verify = false
 EOF
