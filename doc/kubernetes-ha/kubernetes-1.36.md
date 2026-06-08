@@ -9,7 +9,12 @@
 curl -fsSL -o get_docker.sh get.docker.com
 bash get_docker.sh --mirror Aliyun
 
-export CONTAINER_RUNTIME_ENDPOINT=unix:///run/containerd/containerd.sock
+cat << EOF > /etc/crictl.yaml
+runtime-endpoint: unix:///var/run/containerd/containerd.sock
+image-endpoint: unix:///var/run/containerd/containerd.sock
+timeout: 10
+debug: false
+EOF
 
 ```
 
@@ -21,7 +26,6 @@ sudo systemctl stop containerd
 sudo rm -rf /etc/containerd/config.toml
 containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
-sudo sed -i 's/registry\.k8s\.io/registry\.cn-hangzhou\.aliyuncs\.com\/google_containers/g' /etc/containerd/config.toml
 ```
 修改 mirror 文件
 
