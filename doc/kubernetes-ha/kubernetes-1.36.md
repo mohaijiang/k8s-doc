@@ -125,7 +125,7 @@ sudo systemctl enable --now kubelet
 
 ## 初始化集群
 ```
-kubeadm init --pod-network-cidr=10.244.0.0/16 --image-repository=registry.cn-hangzhou.aliyuncs.com/google_containers
+kubeadm init --pod-network-cidr=10.244.0.0/16
 
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 ```
@@ -155,7 +155,7 @@ helm install calico projectcalico/tigera-operator --version v3.31.4 -f values.ya
 
 ## Envoy Gateway
 ```
-helm install eg oci://dockerproxy.net/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace   --skip-crds
+helm install eg oci://docker.io/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace   --skip-crds
 
 cat > gateway.yaml <<EOF
 apiVersion: gateway.networking.k8s.io/v1
