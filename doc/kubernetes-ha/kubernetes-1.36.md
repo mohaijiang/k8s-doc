@@ -261,16 +261,16 @@ kubectl apply -f value.yaml
 ## dashboard
 ```
 # 添加 kubernetes-dashboard 仓库
-helm repo add kubernetes-dashboard https://kubernetes.github.io/dashboard/
+helm repo add headlamp https://kubernetes-sigs.github.io/headlamp/
 # 使用 kubernetes-dashboard Chart 部署名为 `kubernetes-dashboard` 的 Helm Release
-helm upgrade --install kubernetes-dashboard kubernetes-dashboard/kubernetes-dashboard --create-namespace --namespace kubernetes-dashboard
+helm upgrade --install my-headlamp headlamp/headlamp --namespace kube-system
 
 cat <<EOF > admin-user.yml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: admin-user
-  namespace: kubernetes-dashboard
+  namespace: kube-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -283,13 +283,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: admin-user
-  namespace: kubernetes-dashboard
+  namespace: kube-system
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: admin-user
-  namespace: kubernetes-dashboard
+  namespace: kube-system
   annotations:
     kubernetes.io/service-account.name: "admin-user"   
 type: kubernetes.io/service-account-token  
@@ -297,7 +297,7 @@ EOF
 
 kubectl apply -f admin-user.yml
 
-kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={".data.token"} | base64 -d
+kubectl get secret admin-user -n kube-system -o jsonpath={".data.token"} | base64 -d
 
 ```
 
@@ -306,7 +306,7 @@ kubectl get secret admin-user -n kubernetes-dashboard -o jsonpath={".data.token"
 apt-get install open-iscsi nfs-common cryptsetup dmsetup
 helm repo add longhorn https://charts.longhorn.io
 helm repo update  
-helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version 1.11.1
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace
 ```
 
 
