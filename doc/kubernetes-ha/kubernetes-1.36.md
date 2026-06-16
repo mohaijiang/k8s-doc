@@ -155,7 +155,7 @@ helm install calico projectcalico/tigera-operator --version v3.31.4 -f values.ya
 
 ## Envoy Gateway
 ```
-helm install eg oci://docker.io/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace   --skip-crds
+helm install eg oci://docker.sparkcr.cn/envoyproxy/gateway-helm   --version v1.7.1   -n envoy-gateway-system   --create-namespace 
 
 cat > gateway.yaml <<EOF
 apiVersion: gateway.networking.k8s.io/v1
