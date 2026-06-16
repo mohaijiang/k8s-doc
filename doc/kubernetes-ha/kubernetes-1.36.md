@@ -81,6 +81,16 @@ server = "https://quay.io"
   skip_verify = false
 EOF
 
+mkdir -p /etc/containerd/certs.d/ghcr.io
+
+cat << EOF > /etc/containerd/certs.d/ghcr.io/hosts.toml
+server = "https://ghcr.io"
+
+[host."https://ghcr.nju.edu.cn"]
+  capabilities = ["pull", "resolve"]
+  skip_verify = false
+EOF
+
 sudo systemctl restart containerd
 
 ```
