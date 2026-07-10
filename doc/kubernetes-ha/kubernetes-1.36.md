@@ -76,7 +76,7 @@ mkdir -p /etc/containerd/certs.d/quay.io
 cat << EOF > /etc/containerd/certs.d/quay.io/hosts.toml
 server = "https://quay.io"
 
-[host."https://k8s.nju.edu.cn"]
+[host."https://quay.nju.edu.cn"]
   capabilities = ["pull", "resolve"]
   skip_verify = false
 EOF
