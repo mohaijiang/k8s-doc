@@ -112,6 +112,9 @@ sudo modprobe br_netfilter
 ## 设置所需的 sysctl 参数，参数在重新启动后保持不变
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
 net.ipv4.ip_forward                 = 1
+fs.inotify.max_user_instances = 8192
+fs.inotify.max_user_watches = 1048576
+fs.inotify.max_queued_events = 16384
 EOF
 
 ## 应用 sysctl 参数而不重新启动
