@@ -111,11 +111,40 @@ sudo modprobe br_netfilter
 
 ## 设置所需的 sysctl 参数，参数在重新启动后保持不变
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
-net.ipv4.ip_forward                 = 1
+# --- 基础网络转发 (你原有的配置) ---
+net.ipv4.ip_forward = 1
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+
+# --- inotify 文件监听优化 (你原有的配置，已保留) ---
 fs.inotify.max_user_instances = 8192
 fs.inotify.max_user_watches = 1048576
 fs.inotify.max_queued_events = 16384
+
+# --- 🔥 核心修复：Conntrack 连接跟踪表优化 (解决网络假死) ---
+# 将最大连接数调大到 1048576 (约 100万)，防止 K8s 频繁建连导致表满
+net.netfilter.nf_conntrack_max = 1048576
+# 缩短已建立连接的保持时间 (默认 5天 -> 1天)，加速死连接回收
+net.netfilter.nf_conntrack_tcp_timeout_established = 86400
+# 加速 TIME_WAIT 状态的回收 (默认 120秒 -> 30秒)
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 30
+
+# --- 系统资源与稳定性优化 ---
+# 增加系统最大文件句柄数 (防止 too many open files)
+fs.file-max = 2097152
+# 禁用 Swap (K8s 强制要求，防止内存交换导致性能抖动)
+vm.swappiness = 0
+
+# --- 可选：如果节点上运行大量 Pod，建议开启以下内核参数 ---
+# 允许更多的本地端口范围 (默认约 2.8万，调大后约 6.4万)
+net.ipv4.ip_local_port_range = 1024 65000
+# 扩大 TCP 连接队列，防止高并发下的 SYN 丢包
+net.core.somaxconn = 32768
+net.ipv4.tcp_max_syn_backlog = 8096
 EOF
+
+# 立即加载配置使其生效 (无需重启)
+sudo sysctl --system
 
 ## 应用 sysctl 参数而不重新启动
 sudo sysctl --system
